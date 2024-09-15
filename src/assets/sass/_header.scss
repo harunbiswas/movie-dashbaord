@@ -1,0 +1,76 @@
+// login
+.login {
+  &-wrp {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  width: 400px;
+  background-color: rgba($color: $black, $alpha: 0.6);
+  padding: 40px;
+  color: $white;
+  border-radius: 12px;
+
+  form {
+    padding: 20px 0;
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+  }
+}
+
+// sidebar
+.sidebar {
+  width: 15%;
+  border-right: $border;
+  height: 100vh;
+  position: relative;
+
+  .brand {
+    padding: 20px 10px;
+    border-bottom: $border;
+  }
+
+  .logout {
+    padding: 20px 10px;
+    border-top: $border;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+
+    .btn {
+      background-color: $red;
+      color: $white;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      font-size: 14px;
+    }
+  }
+
+  .nav {
+    padding: 10px 20px;
+
+    &-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+
+      a {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: max-content;
+        box-sizing: content-box;
+        border-bottom: 1px solid transparent;
+
+        &:hover,
+        &.active {
+          border-color: $white;
+        }
+      }
+    }
+  }
+}
