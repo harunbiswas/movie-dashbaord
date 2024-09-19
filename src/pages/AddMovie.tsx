@@ -1,5 +1,7 @@
-import axios from "axios";
-import { ChangeEvent, useEffect, useState } from "react";
+import axios, { AxiosError } from "axios";
+import React, { ChangeEvent, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import values from "../values";
 
 // Define interfaces for Movie and Details
 interface Movie {
@@ -10,26 +12,32 @@ interface Movie {
 }
 
 interface MovieDetails {
-  Poster: string;
-  Title: string;
-  Genre: string;
-  Language: string;
-  Country: string;
-  Awards: string;
-  imdbID: string;
-  Type: string;
-  BoxOffice: string;
-  Year: string;
-  Rated: string;
-  Released: string;
-  Runtime: string;
-  Director: string;
-  Writer: string;
-  Actors: string;
-  Plot: string;
+  Poster?: string;
+  Title?: string;
+  Genre?: string;
+  Language?: string;
+  Country?: string;
+  Awards?: string;
+  imdbID?: string;
+  Type?: string;
+  BoxOffice?: string;
+  Year?: string;
+  Rated?: string;
+  Released?: string;
+  Runtime?: string;
+  Director?: string;
+  Writer?: string;
+  Actors?: string;
+  Plot?: string;
+  HdUrl?: string;
+  FullHdUrl?: string;
+  QhdUrl?: string;
 }
 
 export default function AddMovie() {
+  const authenticated = localStorage.getItem("authToken");
+
+  const navigate = useNavigate();
   const [movies, setMovies] = useState<Movie[]>([]);
   const [searchItem, setSearchItem] = useState<string>("");
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
@@ -65,6 +73,21 @@ export default function AddMovie() {
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchItem(e.target.value);
+  };
+
+  const submitHandler = async () => {
+    try {
+      const result = await axios.post(`${values.url}/movie/add`, details, {
+        headers: {
+          Authorization: authenticated,
+        },
+      });
+      console.log(result.data);
+      navigate("/dashboard/movies");
+    } catch (err) {
+      const error = err as AxiosError;
+      console.log(error.response?.data || error.message);
+    }
   };
 
   return (
@@ -163,16 +186,58 @@ export default function AddMovie() {
               </span>
             </div>
             <div className="right-bottom">
+              <h3>Download Links</h3>
               <div className="form-group">
-                <label htmlFor="download">Download Link</label>
+                <label htmlFor="download">HD URL</label>
                 <input
                   type="text"
                   name="download"
+                  value={details?.HdUrl || ""} // Ensure details is not null
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setDetails((prev) => ({
+                      ...(prev || {}), // Handle potential null state
+                      HdUrl: e.target.value,
+                    }));
+                  }}
                   id="download"
                   placeholder="https://example.com/download/"
                 />
               </div>
-              <button className="btn">Publish</button>
+              <div className="form-group">
+                <label htmlFor="download">Full HD URL</label>
+                <input
+                  type="text"
+                  name="download"
+                  value={details?.FullHdUrl || ""} // Ensure details is not null
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setDetails((prev) => ({
+                      ...(prev || {}), // Handle potential null state
+                      FullHdUrl: e.target.value,
+                    }));
+                  }}
+                  id="download"
+                  placeholder="https://example.com/download/"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="download">QHD URL</label>
+                <input
+                  type="text"
+                  name="download"
+                  value={details?.QhdUrl || ""} // Ensure details is not null
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setDetails((prev) => ({
+                      ...(prev || {}),
+                      QhdUrl: e.target.value,
+                    }));
+                  }}
+                  id="download"
+                  placeholder="https://example.com/download/"
+                />
+              </div>
+              <button onClick={submitHandler} className="btn">
+                Publish
+              </button>
             </div>
           </div>
         </div>

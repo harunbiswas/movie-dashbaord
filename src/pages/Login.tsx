@@ -1,5 +1,7 @@
 // src/pages/Login.tsx
+import axios, { AxiosError } from "axios";
 import React, { useState } from "react";
+import Values from "../values";
 
 interface LoginProps {
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
@@ -9,13 +11,24 @@ const Login: React.FC<LoginProps> = ({ setIsAuthenticated }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Perform authentication here (e.g., API call)
-    if (username === "admin" && password === "1234") {
-      localStorage.setItem("authToken", "someAuthToken");
 
-      setIsAuthenticated(true);
+    if (username && password) {
+      try {
+        const result = await axios.post(`${Values.url}/user/login`, {
+          username,
+          password,
+        });
+
+        localStorage.setItem("authToken", result.data.token);
+
+        setIsAuthenticated(true);
+      } catch (err) {
+        // Type the error as AxiosError for better type safety
+        const error = err as AxiosError;
+        console.log(error.response?.data || error.message);
+      }
     }
   };
 

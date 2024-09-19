@@ -30,3 +30,5 @@ const movie = {
   Website: "N/A",
   Response: "True",
 };
+
+export default movie;
