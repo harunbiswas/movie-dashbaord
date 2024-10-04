@@ -60,7 +60,7 @@ export default function AddMovie() {
     if (selectedMovie?.imdbID) {
       axios
         .get(
-          `http://www.omdbapi.com/?apikey=bf4beae2&i=${selectedMovie?.imdbID}`
+          `https://www.omdbapi.com/?apikey=bf4beae2&i=${selectedMovie?.imdbID}`
         )
         .then((d) => {
           setDetails(d.data);
