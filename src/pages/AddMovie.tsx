@@ -46,7 +46,7 @@ export default function AddMovie() {
   useEffect(() => {
     if (searchItem) {
       axios
-        .get(`http://www.omdbapi.com/?apikey=bf4beae2&s=${searchItem}&page=1`)
+        .get(`https://www.omdbapi.com/?apikey=bf4beae2&s=${searchItem}&page=1`)
         .then((d) => {
           setMovies(d.data?.Search || []);
         })
