@@ -4,6 +4,8 @@
 }
 
 .movie {
+  height: max-content;
+
   &-add {
     h1 {
       text-transform: capitalize;
@@ -113,6 +115,36 @@
           }
         }
       }
+    }
+  }
+
+  &-table {
+    border-collapse: collapse;
+    margin-top: 60px;
+
+    tr,
+    td,
+    th {
+      border: 1px solid $white;
+      padding: 10px;
+
+      img {
+        height: 60px;
+        width: 60px;
+        object-fit: cover;
+        border-radius: 3rem;
+      }
+
+      a {
+        background-color: transparent;
+        border: none;
+        font-size: 24px;
+        color: $sucess;
+      }
+    }
+
+    th {
+      text-transform: capitalize;
     }
   }
 }
