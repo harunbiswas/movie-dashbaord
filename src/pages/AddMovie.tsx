@@ -40,6 +40,7 @@ export default function AddMovie() {
   const navigate = useNavigate();
   const [movies, setMovies] = useState<Movie[]>([]);
   const [searchItem, setSearchItem] = useState<string>("");
+  const [axisting, setAxisting] = useState<boolean>(false);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const [details, setDetails] = useState<MovieDetails | null>(null);
 
@@ -78,6 +79,28 @@ export default function AddMovie() {
         });
     }
   }, [selectedMovie]);
+
+  useEffect(() => {
+    if (details?.imdbID) {
+      axios
+        .get(`${values.url}/movie/get/imdbid?imdbID=${details?.imdbID}`, {
+          headers: {
+            Authorization: authenticated,
+          },
+        })
+        .then((d) => {
+          if (d.data.length > 0) {
+            setAxisting(true);
+            setDetails(d.data[0]);
+          } else {
+            setAxisting(false);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+  }, [details]);
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchItem(e.target.value);
@@ -243,9 +266,15 @@ export default function AddMovie() {
                   placeholder="https://example.com/download/"
                 />
               </div>
-              <button onClick={submitHandler} className="btn">
-                Publish
-              </button>
+              {(!axisting && (
+                <button onClick={submitHandler} className="btn">
+                  Publish
+                </button>
+              )) || (
+                <button disabled className="btn">
+                  The movie is existing
+                </button>
+              )}
             </div>
           </div>
         </div>

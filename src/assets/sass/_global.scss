@@ -51,6 +51,11 @@ a {
   &:hover {
     transform: translateY(1px);
   }
+
+  &:disabled {
+    background-color: $black !important;
+    transform: translateY(0px);
+  }
 }
 
 .main {
