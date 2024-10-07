@@ -45,10 +45,18 @@ export default function AddMovie() {
 
   useEffect(() => {
     if (searchItem) {
+      const isImdbId = /^tt\d+$/.test(searchItem); // Check if the search item is an IMDb ID
+      const searchBy = isImdbId ? "i" : "s"; // Use 'i' for IMDb ID, 's' for title
+      const url = `https://www.omdbapi.com/?apikey=bf4beae2&${searchBy}=${searchItem}&page=1`;
+
       axios
-        .get(`https://www.omdbapi.com/?apikey=bf4beae2&s=${searchItem}&page=1`)
+        .get(url)
         .then((d) => {
-          setMovies(d.data?.Search || []);
+          if (isImdbId) {
+            setMovies([d.data]); // If searching by ID, return the movie in an array
+          } else {
+            setMovies(d.data?.Search || []); // If searching by title, return the array of movies
+          }
         })
         .catch((e) => {
           console.log(e);
@@ -99,7 +107,7 @@ export default function AddMovie() {
           <label htmlFor="search">Search movies</label>
           <input
             value={searchItem}
-            placeholder="Search movies"
+            placeholder="Title or imdbID"
             onChange={handleSearchChange}
             type="text"
             id="search"
