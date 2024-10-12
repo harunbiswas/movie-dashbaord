@@ -30,6 +30,7 @@ interface MovieDetails {
   Actors?: string;
   Plot?: string;
   HdUrl?: string;
+  LowUrl?: string;
   FullHdUrl?: string;
   QhdUrl?: string;
 }
@@ -218,6 +219,22 @@ export default function AddMovie() {
             </div>
             <div className="right-bottom">
               <h3>Download Links</h3>
+              <div className="form-group">
+                <label htmlFor="download">420p URL</label>
+                <input
+                  type="text"
+                  name="download"
+                  value={details?.LowUrl || ""} // Ensure details is not null
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setDetails((prev) => ({
+                      ...(prev || {}), // Handle potential null state
+                      LowUrl: e.target.value,
+                    }));
+                  }}
+                  id="download"
+                  placeholder="https://example.com/download/"
+                />
+              </div>
               <div className="form-group">
                 <label htmlFor="download">HD URL</label>
                 <input
